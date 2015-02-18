@@ -78,7 +78,7 @@ the relationship is directed from the time instant node to the event node.
 
 // Example for adding a node to a timeTree after its creation :
 
-$q = 'CREATE (n:SuperEvent) RETURN n;
+$q = 'CREATE (n:SuperEvent) RETURN n';
 $result = $client->sendCypherQuery($q)->getResult();
 $nodeId = $result->get('n')->getId();
 
@@ -106,10 +106,10 @@ $events = $result->getNodes();
 
 ### To-Do :
 
-[ ] Support for more TT features
-[ ] Support for multiple tree roots
-[ ] More Cypher/TT integration for e.g. retrieving nodes by label attached to times
-[ ] User defined method for retrieving events (Cypher or TT)
+- [ ] Support for more TT features
+- [ ] Support for multiple tree roots
+- [ ] More Cypher/TT integration for e.g. retrieving nodes by label attached to times
+- [ ] User defined method for retrieving events (Cypher or TT)
 
 ### Tests :
 
