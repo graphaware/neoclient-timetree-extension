@@ -65,6 +65,9 @@ class TimeTreeExtension extends AbstractExtension
             ),
             'graphaware_timetree_get_time_events' => array(
                 'class' => 'GraphAware\\NeoClientExtension\\TimeTree\\Command\\GetTimeEventsCommand'
+            ),
+            'graphaware_timetree_get_events_in_range' => array(
+                'class' => 'GraphAware\\NeoClientExtension\\TimeTree\\Command\\GetTimeEventsInRangeCommand'
             )
         );
     }
@@ -153,6 +156,25 @@ class TimeTreeExtension extends AbstractExtension
         $params = ['ids' => $ids];
         $command = $this->invoke('neo.send_cypher_query', $conn);
         $command->setArguments($query, $params, $this->resultDataContent, self::READ_QUERY);
+        $httpResponse = $command->execute();
+
+        return $this->handleHttpResponse($httpResponse);
+    }
+
+    public function getTimeEventsInRange($startTime, $endTime = null, $resolution = null, $timezone = null, $conn = null)
+    {
+        $command = $this->invoke('graphaware_timetree_get_events_in_range', $conn);
+        $command->setArguments($startTime, $endTime, $resolution, $timezone);
+        $response = $command->execute();
+
+        $ids = [];
+        foreach ($response->getBody() as $node) {
+            $ids[] = $node['nodeId'];
+        }
+        $q = 'MATCH (n) WHERE id(n) IN {ids} RETURN n';
+        $params = ['ids' => $ids];
+        $command = $this->invoke('neo.send_cypher_query', $conn);
+        $command->setArguments($q, $params, $this->resultDataContent, self::READ_QUERY);
         $httpResponse = $command->execute();
 
         return $this->handleHttpResponse($httpResponse);

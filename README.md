@@ -91,7 +91,7 @@ $client->addNodeToTime($nodeId, time(), 'EVENT_OCCUR_ON');
 This mixes the timetree functionality with Cypher in order to retrieve all the nodes informations in your objects, like
 labels, etc...
 
-```
+```php
 $result = $client->getTimeEvents(time())->getResult();
 
 // Returns you a collection of nodes, the identifier of the collection is "n"
@@ -100,6 +100,26 @@ $events = $result->get('n');
 // OR
 
 $events = $result->getNodes();
+```
+
+### Retrieving event nodes that occur between a time range
+
+You should here specify the start time and the end time is default to `NOW`.
+
+```php
+$result = $client->getTimeEventsInRange(112556325)->getResult();
+// Again the identifier is n
+
+$events = $result->get('n');
+```
+
+You can also specify the resolution, for e.g. to hours :
+
+```php
+$result = $client->getTimeEventsInRange(112556325, time(), \TimeTreeExtension::TIMETREE_RESOLUTION_HOUR)->getResult();
+// Again the identifier is n
+
+$events = $result->get('n');
 ```
 
 ----

@@ -5,6 +5,9 @@ use GraphAware\NeoClientExtension\TimeTree\TimeTreeExtension;
 
 class FunctionalTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Neoxygen\NeoClient\Client
+     */
     protected $client;
 
     public function setUp()
@@ -60,5 +63,26 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->client->addNodeToTime($nodeId, $t, 'SUPER_EVENT_OCCURED_ON'));
         $event = $this->client->getTimeEvents($t)->getResult();
         $this->assertSame($nodeId, $event->getSingleNode()->getId());
+    }
+
+    public function testGetEventsInRange()
+    {
+        $this->client->sendCypherQuery('MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE r,n');
+        $start = new \DateTime();
+        $start->setDate(2015, 1, 31);
+        $end = new \DateTime();
+        $end->setDate(2015, 2, 18);
+        $q = 'CREATE (n:SuperEvent),
+        (n2:SuperEvent)
+        RETURN n, n2';
+        $r = $this->client->sendCypherQuery($q)->getResult();
+        $startNodeId = $r->get('n')->getId();
+        $endNodeId = $r->get('n2')->getId();
+        $this->client->addNodeToTime($startNodeId, $start->getTimestamp(), 'EVENT_OCCURS_ON');
+        $this->client->addNodeToTime($endNodeId, $end->getTimestamp(), 'EVENT_OCCURS_ON');
+        $result = $this->client->getTimeEventsInRange($start->getTimestamp(), $end->getTimestamp())->getResult();
+
+        $this->assertCount(2, $result->getNodes());
+
     }
 }
