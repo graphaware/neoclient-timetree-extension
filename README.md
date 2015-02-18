@@ -35,6 +35,11 @@ $client = ClientBuilder::create()
 
 Note that the extension name `graphaware-timetree` can be changed to whatever you want.
 
+### Note
+
+As NeoClient is natively built for working with multiple Neo4j instances, the last parameters of each of the 
+below methods is the connection alias string (default connection is used when omitted).
+
 ### Adding schema indexes for the TimeTree time nodes
 
 With this simple method, it will add the schema indexes on the Year, Month, Day, Hour, Minute, Second and Millisecond 

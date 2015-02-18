@@ -75,7 +75,7 @@ class TimeTreeExtension extends AbstractExtension
     /**
      * Creates the schema indexes on the TimeTree nodes
      *
-     * @param null $conn
+     * @param null|string $conn The connection alias
      * @return bool
      */
     public function createTimeTreeIndexes($conn = null)
@@ -94,10 +94,10 @@ class TimeTreeExtension extends AbstractExtension
     /**
      * Get a node for a time instant
      *
-     * @param null $timestamp
-     * @param null $resolution
-     * @param null $timezone
-     * @param null $conn
+     * @param null|int $timestamp
+     * @param null|int $resolution
+     * @param null|string $timezone
+     * @param null|string $conn
      * @return int
      */
     public function getTimeNode($timestamp = null, $resolution = null, $timezone = null, $conn = null)
@@ -114,12 +114,12 @@ class TimeTreeExtension extends AbstractExtension
     /**
      * Add an event node to a time instant
      *
-     * @param $nodeId
-     * @param null $timestamp
-     * @param $relationshipType
-     * @param null $resolution
-     * @param null $timezone
-     * @param null $conn
+     * @param int $nodeId
+     * @param null|int $timestamp
+     * @param string $relationshipType
+     * @param null|string $resolution
+     * @param null|string $timezone
+     * @param null|string $conn
      * @return bool
      */
     public function addNodeToTime($nodeId, $timestamp = null, $relationshipType, $resolution = null, $timezone = null, $conn = null)
@@ -134,11 +134,11 @@ class TimeTreeExtension extends AbstractExtension
     /**
      * Returns event nodes attached to a time instant
      *
-     * @param $timestamp
-     * @param null $resolution
-     * @param null $timezone
-     * @param null $relationshipType
-     * @param null $conn
+     * @param int $timestamp
+     * @param null|string $resolution
+     * @param null|string $timezone
+     * @param null|string $relationshipType
+     * @param null|string $conn
      * @return array|\Neoxygen\NeoClient\Formatter\Response|string
      */
     public function getTimeEvents($timestamp, $resolution = null, $timezone = null, $relationshipType = null, $conn = null)
@@ -161,6 +161,14 @@ class TimeTreeExtension extends AbstractExtension
         return $this->handleHttpResponse($httpResponse);
     }
 
+    /**
+     * @param int $startTime
+     * @param null|int $endTime
+     * @param null|string $resolution
+     * @param null|string $timezone
+     * @param null|string $conn
+     * @return array|\Neoxygen\NeoClient\Formatter\Response|string
+     */
     public function getTimeEventsInRange($startTime, $endTime = null, $resolution = null, $timezone = null, $conn = null)
     {
         $command = $this->invoke('graphaware_timetree_get_events_in_range', $conn);
