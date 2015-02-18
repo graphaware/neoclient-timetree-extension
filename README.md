@@ -1,4 +1,4 @@
-## TimeTree extension for PHP NeoClient [WIP]
+## TimeTree extension for PHP NeoClient
 
 This library extends [Neo4j PHP NeoClient](https://github.com/neoxygen/neo4j-neoclient) by adding convenient methods
 for working with the [GraphAware TimeTree Plugin](https://github.com/graphaware/neo4j-timetree).
