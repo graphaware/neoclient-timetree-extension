@@ -116,7 +116,11 @@ $events = $result->get('n');
 You can also specify the resolution, for e.g. to hours :
 
 ```php
-$result = $client->getTimeEventsInRange(112556325, time(), \TimeTreeExtension::TIMETREE_RESOLUTION_HOUR)->getResult();
+$result = $client->getTimeEventsInRange(
+    112556325, 
+    time(), 
+    TimeTreeExtension::TIMETREE_RESOLUTION_HOUR
+    )->getResult();
 // Again the identifier is n
 
 $events = $result->get('n');
