@@ -1,0 +1,22 @@
+{
+    "name": "graphaware/neoclient-timetree",
+    "description": "PHP NeoClient extension for the GraphAware TimeTree Neo4j plugin",
+    "require": {
+        "neoxygen/neoclient": "~2.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.5"
+    },
+    "license": "AGPLv3",
+    "authors": [
+        {
+            "name": "Christophe Willemsen",
+            "email": "christophe@graphaware.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "GraphAware\\NeoClientExtension\\TimeTree\\": "src/"
+        }
+    }
+}
