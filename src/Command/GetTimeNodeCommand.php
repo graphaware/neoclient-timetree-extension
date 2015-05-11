@@ -42,6 +42,11 @@ class GetTimeNodeCommand extends AbstractCommand
     private $timezone;
 
     /**
+     * @var int RootNodeId
+     */
+    private $rootNodeId;
+
+    /**
      * @return mixed
      */
     public function execute()
@@ -55,8 +60,9 @@ class GetTimeNodeCommand extends AbstractCommand
      * @param null|int    $timestamp The timestamp for the time node
      * @param null|string $resolution The resolution for the time node to be created, refer to TimeTreeExtension constants, default to day
      * @param null|string $timezone The timezone to be used, default to UTC
+     * @param null|int $rootNodeId The rootNodeId
      */
-    public function setArguments($timestamp = null, $resolution = null, $timezone = null)
+    public function setArguments($timestamp = null, $resolution = null, $timezone = null, $rootNodeId = null)
     {
         if (null === $timestamp) {
             $t = new \DateTime('NOW');
@@ -77,6 +83,10 @@ class GetTimeNodeCommand extends AbstractCommand
 
         if (null !== $timezone) {
             $this->timezone = (string) $timezone;
+        }
+
+        if (null !== $rootNodeId) {
+            $this->rootNodeId = (int) $rootNodeId;
         }
     }
 

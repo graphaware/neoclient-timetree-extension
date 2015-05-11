@@ -13,7 +13,7 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->client = ClientBuilder::create()
-            ->addDefaultLocalConnection()
+            ->addConnection('default', 'http', 'localhost', 7474, true, 'neo4j', 'error')
             ->setAutoFormatResponse(true)
             ->registerExtension('graphaware_timetree', 'GraphAware\\NeoClientExtension\\TimeTree\\TimeTreeExtension')
             ->build();
@@ -84,5 +84,21 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(2, $result->getNodes());
 
+    }
+
+    public function testGetTimeNodeForRoot()
+    {
+        $this->client->sendCypherQuery('MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE r,n');
+        $result = $this->client->sendCypherQuery('CREATE (n:TimeTreeRoot) RETURN n')->getResult();
+        $root = $result->get('n')->getId();
+        $this->assertTrue(is_int($root));
+        $t = new \DateTime("NOW");
+        $eventResult = $this->client->sendCypherQuery('CREATE (e:Event) RETURN e')->getResult();
+        $eventId = $eventResult->get('e')->getId();
+        $this->client->addNodeToTimeForRoot($root, $eventId, $t->getTimestamp(), 'EVENT_OCCURS_ON');
+        $result = $this->client->getTimeEventsForRoot($root, $t->getTimestamp())->getResult();
+
+        $this->assertCount(1, $result->getNodes());
+        $this->assertTrue($result->getSingleNode()->hasLabel('Event'));
     }
 }

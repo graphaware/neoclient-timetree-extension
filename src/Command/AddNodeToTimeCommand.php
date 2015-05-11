@@ -24,7 +24,7 @@ class AddNodeToTimeCommand extends AbstractCommand
     /**
      * const path portion for the http endpoint
      */
-    const PATH = '/graphaware/timetree/single/event';
+    const PATH = '/graphaware/timetree/';
 
     /**
      * @var int The time node to return
@@ -46,6 +46,8 @@ class AddNodeToTimeCommand extends AbstractCommand
      */
     private $nodeId;
 
+    private $rootNodeId;
+
     /**
      * @var string The relationship type directed from the time node to the event node
      */
@@ -56,7 +58,7 @@ class AddNodeToTimeCommand extends AbstractCommand
      */
     public function execute()
     {
-        return $this->process(self::METHOD, self::PATH, $this->prepareBody(), $this->connection);
+        return $this->process(self::METHOD, $this->getPath(), $this->prepareBody(), $this->connection);
     }
 
     /**
@@ -66,7 +68,7 @@ class AddNodeToTimeCommand extends AbstractCommand
      * @param null|string $resolution The resolution for the time node to be created, refer to TimeTreeExtension constants, default to day
      * @param null|string $timezone The timezone to be used, default to UTC
      */
-    public function setArguments($nodeId, $timestamp = null, $relationshipType, $resolution = null, $timezone = null)
+    public function setArguments($nodeId, $timestamp = null, $relationshipType, $resolution = null, $timezone = null, $rootNodeId = null)
     {
         $this->nodeId = (int) $nodeId;
         $this->relationshipType = (string) $relationshipType;
@@ -91,6 +93,10 @@ class AddNodeToTimeCommand extends AbstractCommand
         if (null !== $timezone) {
             $this->timezone = (string) $timezone;
         }
+
+        if (null !== $rootNodeId) {
+            $this->rootNodeId = (int) $rootNodeId;
+        }
     }
 
     private function prepareBody()
@@ -110,5 +116,14 @@ class AddNodeToTimeCommand extends AbstractCommand
         }
 
         return json_encode($body);
+    }
+
+    private function getPath()
+    {
+        if (null !== $this->rootNodeId) {
+            return self::PATH . $this->rootNodeId . '/single/event';
+        }
+
+        return self::PATH . 'single/event';
     }
 }

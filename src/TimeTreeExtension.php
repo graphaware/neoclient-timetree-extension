@@ -132,6 +132,26 @@ class TimeTreeExtension extends AbstractExtension
     }
 
     /**
+     * Add an event node to a time instant
+     *
+     * @param int $nodeId
+     * @param null|int $timestamp
+     * @param string $relationshipType
+     * @param null|string $resolution
+     * @param null|string $timezone
+     * @param null|string $conn
+     * @return bool
+     */
+    public function addNodeToTimeForRoot($rootNodeId, $nodeId, $timestamp = null, $relationshipType, $resolution = null, $timezone = null, $conn = null)
+    {
+        $command = $this->invoke('graphaware_timetree_add_node_to_time', $conn);
+        $command->setArguments($nodeId, $timestamp, $relationshipType, $resolution, $timezone);
+        $command->execute();
+
+        return true;
+    }
+
+    /**
      * Returns event nodes attached to a time instant
      *
      * @param int $timestamp
@@ -145,6 +165,36 @@ class TimeTreeExtension extends AbstractExtension
     {
         $command = $this->invoke('graphaware_timetree_get_time_events', $conn);
         $command->setArguments($timestamp, $resolution, $timezone, $relationshipType);
+        $response = $command->execute();
+        $parsed = $this->handleHttpResponse($response);
+
+        $ids = [];
+        foreach ($parsed->getBody() as $node) {
+            $ids[] = (int) $node['nodeId'];
+        }
+        $query = 'MATCH (n) WHERE id(n) IN {ids} RETURN n';
+        $params = ['ids' => $ids];
+        $command = $this->invoke('neo.send_cypher_query', $conn);
+        $command->setArguments($query, $params, $this->resultDataContent, self::READ_QUERY);
+        $httpResponse = $command->execute();
+
+        return $this->handleHttpResponse($httpResponse);
+    }
+
+    /**
+     * Returns event nodes attached to a time instant
+     *
+     * @param int $timestamp
+     * @param null|string $resolution
+     * @param null|string $timezone
+     * @param null|string $relationshipType
+     * @param null|string $conn
+     * @return array|\Neoxygen\NeoClient\Formatter\Response|string
+     */
+    public function getTimeEventsForRoot($rootNodeId, $timestamp, $resolution = null, $timezone = null, $relationshipType = null, $conn = null)
+    {
+        $command = $this->invoke('graphaware_timetree_get_time_events', $conn);
+        $command->setArguments($timestamp, $resolution, $timezone, $relationshipType, $rootNodeId);
         $response = $command->execute();
         $parsed = $this->handleHttpResponse($response);
 

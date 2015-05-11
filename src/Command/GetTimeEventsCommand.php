@@ -24,7 +24,7 @@ class GetTimeEventsCommand extends AbstractCommand
     /**
      * const path portion for the http endpoint
      */
-    const PATH = '/graphaware/timetree/single/';
+    const PATH = '/graphaware/timetree/';
 
     /**
      * @var int The time node to return
@@ -41,6 +41,8 @@ class GetTimeEventsCommand extends AbstractCommand
      */
     private $timezone;
 
+    private $rootNodeId;
+
     /**
      * @return mixed
      */
@@ -56,7 +58,7 @@ class GetTimeEventsCommand extends AbstractCommand
      * @param null|string $resolution The resolution for the time node to be created, refer to TimeTreeExtension constants, default to day
      * @param null|string $timezone The timezone to be used, default to UTC
      */
-    public function setArguments($timestamp = null, $resolution = null, $timezone = null)
+    public function setArguments($timestamp = null, $resolution = null, $timezone = null, $rootNodeId = null)
     {
         if (null === $timestamp) {
             $t = new \DateTime('NOW');
@@ -78,6 +80,10 @@ class GetTimeEventsCommand extends AbstractCommand
         if (null !== $timezone) {
             $this->timezone = (string) $timezone;
         }
+
+        if (null !== $rootNodeId) {
+            $this->rootNodeId = $rootNodeId;
+        }
     }
 
     /**
@@ -87,7 +93,13 @@ class GetTimeEventsCommand extends AbstractCommand
      */
     private function getPath()
     {
-        return self::PATH . $this->time . '/events';
+        $p = self::PATH;
+        if (null !== $this->rootNodeId) {
+            $p .= $this->rootNodeId . '/';
+        }
+        $p .= 'single/' . $this->time . '/events';
+
+        return $p;
     }
 
     private function getQueryStrings()
