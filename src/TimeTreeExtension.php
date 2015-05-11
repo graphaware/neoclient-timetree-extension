@@ -188,4 +188,3 @@ class TimeTreeExtension extends AbstractExtension
         return $this->handleHttpResponse($httpResponse);
     }
 }
-

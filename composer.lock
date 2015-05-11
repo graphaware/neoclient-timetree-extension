@@ -126,16 +126,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.12.0",
+            "version": "1.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f"
+                "reference": "c31a2c4e8db5da8b46c74cf275d7f109c0f249ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
-                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c31a2c4e8db5da8b46c74cf275d7f109c0f249ac",
+                "reference": "c31a2c4e8db5da8b46c74cf275d7f109c0f249ac",
                 "shasum": ""
             },
             "require": {
@@ -152,6 +152,7 @@
                 "phpunit/phpunit": "~4.0",
                 "raven/raven": "~0.5",
                 "ruflin/elastica": "0.90.*",
+                "swiftmailer/swiftmailer": "~5.3",
                 "videlalvaro/php-amqplib": "~2.4"
             },
             "suggest": {
@@ -168,7 +169,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12.x-dev"
+                    "dev-master": "1.13.x-dev"
                 }
             },
             "autoload": {
@@ -194,25 +195,25 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-12-29 21:29:35"
+            "time": "2015-03-09 09:58:04"
         },
         {
             "name": "neoxygen/neoclient",
-            "version": "2.1.4",
+            "version": "2.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/neoxygen/neo4j-neoclient.git",
-                "reference": "3cacfb256dac48e3fb8cfe3ac31ef97eace4eb19"
+                "reference": "5ac7d403811f27fd6515c9953ea14cbc84514908"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/neoxygen/neo4j-neoclient/zipball/3cacfb256dac48e3fb8cfe3ac31ef97eace4eb19",
-                "reference": "3cacfb256dac48e3fb8cfe3ac31ef97eace4eb19",
+                "url": "https://api.github.com/repos/neoxygen/neo4j-neoclient/zipball/5ac7d403811f27fd6515c9953ea14cbc84514908",
+                "reference": "5ac7d403811f27fd6515c9953ea14cbc84514908",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "4.*",
-                "monolog/monolog": "~1.3",
+                "monolog/monolog": "~1.1",
                 "php": ">= 5.4",
                 "symfony/config": "~2.5",
                 "symfony/console": "~2.5",
@@ -256,7 +257,7 @@
                 "high-availibility",
                 "neo4j"
             ],
-            "time": "2015-02-13 20:37:32"
+            "time": "2015-03-05 20:32:39"
         },
         {
             "name": "psr/log",
