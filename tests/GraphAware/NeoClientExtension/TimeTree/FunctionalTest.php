@@ -124,9 +124,6 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $result->getNodes());
     }
 
-    /**
-     * Currently not possible
-     *
     public function testEventAttachedToMoreThanOneRoot()
     {
         $this->client->sendCypherQuery('MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE r,n');
@@ -143,5 +140,5 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $resRoot1->getNodes());
         $this->assertCount(1, $resRoot2->getNodes());
     }
-     * */
+
 }

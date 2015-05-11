@@ -43,6 +43,8 @@ class GetTimeEventsCommand extends AbstractCommand
 
     private $rootNodeId;
 
+    private $relationhipType;
+
     /**
      * @return mixed
      */
@@ -57,8 +59,9 @@ class GetTimeEventsCommand extends AbstractCommand
      * @param null|int    $timestamp The timestamp for the time node
      * @param null|string $resolution The resolution for the time node to be created, refer to TimeTreeExtension constants, default to day
      * @param null|string $timezone The timezone to be used, default to UTC
+     * @param null|int $rootNodeId The id of the TimeTreeRootNode
      */
-    public function setArguments($timestamp = null, $resolution = null, $timezone = null, $rootNodeId = null)
+    public function setArguments($timestamp = null, $resolution = null, $timezone = null, $relType = null, $rootNodeId = null)
     {
         if (null === $timestamp) {
             $t = new \DateTime('NOW');
@@ -82,7 +85,11 @@ class GetTimeEventsCommand extends AbstractCommand
         }
 
         if (null !== $rootNodeId) {
-            $this->rootNodeId = $rootNodeId;
+            $this->rootNodeId = (int) $rootNodeId;
+        }
+
+        if (null !== $relType) {
+            $this->relationhipType = (string) $relType;
         }
     }
 
@@ -116,6 +123,10 @@ class GetTimeEventsCommand extends AbstractCommand
 
         if (null !== $this->timezone) {
             $qs['timezone'] = $this->timezone;
+        }
+
+        if (null !== $this->relationhipType) {
+            $qs['relationshipTypes'] = $this->relationhipType;
         }
 
         return $qs;

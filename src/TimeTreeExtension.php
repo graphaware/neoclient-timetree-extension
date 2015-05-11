@@ -184,6 +184,7 @@ class TimeTreeExtension extends AbstractExtension
     /**
      * Returns event nodes attached to a time instant
      *
+     * @param int $rootNodeId
      * @param int $timestamp
      * @param null|string $resolution
      * @param null|string $timezone
