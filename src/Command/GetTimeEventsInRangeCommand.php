@@ -24,7 +24,7 @@ class GetTimeEventsInRangeCommand extends AbstractCommand
     /**
      * const path portion for the http endpoint
      */
-    const PATH = '/graphaware/timetree/range/';
+    const PATH = '/graphaware/timetree/';
 
     /**
      * @var int The start time of the range
@@ -46,6 +46,8 @@ class GetTimeEventsInRangeCommand extends AbstractCommand
      */
     private $timezone;
 
+    private $rootNodeId;
+
     /**
      * @return mixed
      */
@@ -61,7 +63,7 @@ class GetTimeEventsInRangeCommand extends AbstractCommand
      * @param null|string $resolution The resolution for the time node to be created, refer to TimeTreeExtension constants, default to day
      * @param null|string $timezone The timezone to be used, default to UTC
      */
-    public function setArguments($startTime, $endTime = null, $resolution = null, $timezone = null)
+    public function setArguments($startTime, $endTime = null, $resolution = null, $timezone = null, $rootNodeId = null)
     {
         if (null === $endTime) {
             $t = new \DateTime('NOW');
@@ -89,6 +91,10 @@ class GetTimeEventsInRangeCommand extends AbstractCommand
         if (null !== $timezone) {
             $this->timezone = (string) $timezone;
         }
+
+        if (null !== $rootNodeId) {
+            $this->rootNodeId = (int) $rootNodeId;
+        }
     }
 
     /**
@@ -98,7 +104,13 @@ class GetTimeEventsInRangeCommand extends AbstractCommand
      */
     private function getPath()
     {
-        return self::PATH . $this->startTime . '/' . $this->endTime . '/events';
+        $p = self::PATH;
+        if (null !== $this->rootNodeId) {
+            $p .= $this->rootNodeId . '/';
+        }
+        $p .= 'range/' . $this->startTime . '/' . $this->endTime . '/events';
+
+        return $p;
     }
 
     private function getQueryStrings()

@@ -101,4 +101,47 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $result->getNodes());
         $this->assertTrue($result->getSingleNode()->hasLabel('Event'));
     }
+
+    public function testGetEventsInRangeForRoot()
+    {
+        $this->client->sendCypherQuery('MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE r,n');
+        $result = $this->client->sendCypherQuery('CREATE (n:MyTTRoot) RETURN n')->getResult();
+        $rootId = $result->get('n')->getId();
+        $start = new \DateTime();
+        $start->setDate(2015, 1, 31);
+        $end = new \DateTime();
+        $end->setDate(2015, 2, 18);
+        $q = 'CREATE (n:SuperEvent),
+        (n2:SuperEvent)
+        RETURN n, n2';
+        $r = $this->client->sendCypherQuery($q)->getResult();
+        $startNodeId = $r->get('n')->getId();
+        $endNodeId = $r->get('n2')->getId();
+        $this->client->addNodeToTimeForRoot($rootId, $startNodeId, $start->getTimestamp(), 'EVENT_OCCURS_ON');
+        $this->client->addNodeToTimeForRoot($rootId, $endNodeId, $end->getTimestamp(), 'EVENT_OCCURS_ON');
+        $result = $this->client->getTimeEventsInRangeForRoot($rootId, $start->getTimestamp() - 10000, $end->getTimestamp() + 10000)->getResult();
+
+        $this->assertCount(2, $result->getNodes());
+    }
+
+    /**
+     * Currently not possible
+     *
+    public function testEventAttachedToMoreThanOneRoot()
+    {
+        $this->client->sendCypherQuery('MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE r,n');
+        $result = $this->client->sendCypherQuery('CREATE (n:TimeTreeRoot {id:1}), (n2:TimeTreeRoot {id:2}) RETURN n, n2')->getResult();
+        $root1 = $result->get('n')->getId();
+        $root2 = $result->get('n2')->getId();
+        $result = $this->client->sendCypherQuery('CREATE (e:Event) RETURN e')->getResult();
+        $event = $result->get('e')->getId();
+        $t = new \DateTime("NOW");
+        $this->client->addNodeToTimeForRoot($root1, $event, $t->getTimestamp(), 'EVENT_OCCURS_ON');
+        $this->client->addNodeToTimeForRoot($root2, $event, $t->getTimestamp(), 'EVENT_OCCURS_ON');
+        $resRoot1 = $this->client->getTimeEventsForRoot($root1, $t->getTimestamp())->getResult();
+        $resRoot2 = $this->client->getTimeEventsForRoot($root2, $t->getTimestamp())->getResult();
+        $this->assertCount(1, $resRoot1->getNodes());
+        $this->assertCount(1, $resRoot2->getNodes());
+    }
+     * */
 }

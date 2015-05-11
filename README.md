@@ -133,10 +133,22 @@ $events = $result->get('n');
 
 ----
 
+### Adding an event to a time tree with specified rootNodeId
+
+```php
+$client->addNodeToTimeForRoot($rootNodeId, $eventNodeId, $time, $relationshipType, $resolution, $connection);
+```
+
+### Retrieving events for time and specified rootNodeId
+
+```php
+$events = $client->getTimeEventsForRoot($rootNodeId, $time);
+```
+
 ### To-Do :
 
 - [ ] Support for more TT features
-- [ ] Support for multiple tree roots
+- [x] Support for multiple tree roots
 - [ ] More Cypher/TT integration for e.g. retrieving nodes by label attached to times
 - [ ] User defined method for retrieving events (Cypher or TT)
 

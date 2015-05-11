@@ -145,7 +145,7 @@ class TimeTreeExtension extends AbstractExtension
     public function addNodeToTimeForRoot($rootNodeId, $nodeId, $timestamp = null, $relationshipType, $resolution = null, $timezone = null, $conn = null)
     {
         $command = $this->invoke('graphaware_timetree_add_node_to_time', $conn);
-        $command->setArguments($nodeId, $timestamp, $relationshipType, $resolution, $timezone);
+        $command->setArguments($nodeId, $timestamp, $relationshipType, $resolution, $timezone, $rootNodeId);
         $command->execute();
 
         return true;
@@ -223,6 +223,33 @@ class TimeTreeExtension extends AbstractExtension
     {
         $command = $this->invoke('graphaware_timetree_get_events_in_range', $conn);
         $command->setArguments($startTime, $endTime, $resolution, $timezone);
+        $response = $command->execute();
+
+        $ids = [];
+        foreach ($response->getBody() as $node) {
+            $ids[] = $node['nodeId'];
+        }
+        $q = 'MATCH (n) WHERE id(n) IN {ids} RETURN n';
+        $params = ['ids' => $ids];
+        $command = $this->invoke('neo.send_cypher_query', $conn);
+        $command->setArguments($q, $params, $this->resultDataContent, self::READ_QUERY);
+        $httpResponse = $command->execute();
+
+        return $this->handleHttpResponse($httpResponse);
+    }
+
+    /**
+     * @param int $startTime
+     * @param null|int $endTime
+     * @param null|string $resolution
+     * @param null|string $timezone
+     * @param null|string $conn
+     * @return array|\Neoxygen\NeoClient\Formatter\Response|string
+     */
+    public function getTimeEventsInRangeForRoot($rootNodeId, $startTime, $endTime = null, $resolution = null, $timezone = null, $conn = null)
+    {
+        $command = $this->invoke('graphaware_timetree_get_events_in_range', $conn);
+        $command->setArguments($startTime, $endTime, $resolution, $timezone, $rootNodeId);
         $response = $command->execute();
 
         $ids = [];
